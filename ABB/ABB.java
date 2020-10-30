@@ -1,14 +1,16 @@
+package ABB;
+
 public class ABB<T extends Comparable<T>> {
     public Node<T> getRaiz() {
         return raiz;
     }
 
-    private Node<T> raiz = new Node<>(null);
+    private Node<T> raiz = new Node<T>(null);
     private Node info;
 
     public ABB() {
         this.info = null;
-        this.raiz = new Node<>(null);
+        this.raiz = new Node<T>(null);
     }
 
     public boolean insere(T valor) {
@@ -24,8 +26,8 @@ public class ABB<T extends Comparable<T>> {
             }
         }
         no.info = valor;
-        no.esq = new Node<>(null);
-        no.dir = new Node<>(null);
+        no.esq = new Node<T>(null);
+        no.dir = new Node<T>(null);
         return true;
     }
 
@@ -85,103 +87,6 @@ public class ABB<T extends Comparable<T>> {
         return ret;
     }
 
-//    public T remove(T valor) {
-//        T valorEncontrado = busca(valor);
-//        if(valorEncontrado == null){
-//            return null;
-//        }
-//        Node<T> pai = null;
-//        Node<T> ponteiro = this.raiz;
-//        Node<T> teste = null;
-//        while (ponteiro != null) {
-//            if (ponteiro.info.compareTo(valor) >= 0 || this.raiz.info.equals(valor)) {
-//                if (ponteiro.info.compareTo(valor) == 0 || ponteiro.esq.info.compareTo(valor) == 0) {
-//                    if (ponteiro.esq.info == null && ponteiro.dir.info == null) {
-//                        pai.esq = null;
-//                        ponteiro = pai;
-//                    } else if (ponteiro.esq.info != null && ponteiro.dir.info == null && ponteiro.esq.info == valor) {
-//                        pai.esq = ponteiro.esq;
-//                        ponteiro.esq = ponteiro.esq.esq;
-//                        ponteiro.info = pai.info;
-//                        return ponteiro.info;
-//                    } else if (ponteiro.dir.info != null && ponteiro.esq.info == null && ponteiro.dir.info == valor) {
-//                        pai = ponteiro.dir;
-//                        ponteiro.dir = ponteiro.dir.dir;
-//                        ponteiro.info = pai.info;
-//                        return ponteiro.info;
-//                    } else if (ponteiro.esq.info == valor && ponteiro.dir.info != null && ponteiro.esq.info != null) {
-//                        pai = ponteiro;
-//                        ponteiro = ponteiro.esq;
-//                        if (ponteiro.esq.info != null){
-//                              ponteiro.esq = ponteiro.esq.esq;
-//                            return ponteiro.info;
-//                        }else if (ponteiro.dir.info != null){
-//                             ponteiro.dir  = ponteiro.dir.dir;
-//
-//                            return ponteiro.info;
-//                        }else {
-//                            return ponteiro.info = null;
-//                        }
-//                    } else if (ponteiro.dir.info != null && ponteiro.esq.info != null && ponteiro.info == valor) {
-//                        teste = ponteiro;
-//                        if (ponteiro.info == this.raiz.info) {
-//                            ponteiro = ponteiro.esq;
-//                        }
-//
-//                        while (ponteiro.dir != null) {
-//                            pai = ponteiro;
-//                            ponteiro = ponteiro.dir;
-//                        }
-//
-//                        ponteiro = pai.esq;
-//                        pai.dir = null;
-//                        teste.esq = ponteiro;
-//                        return teste.info = pai.info;
-//
-//                    }
-//                    pai = ponteiro;
-//                    ponteiro = ponteiro.esq;
-//                }
-//            }
-//            if (ponteiro.info.compareTo(valor) <= 0) {
-//
-//                if (ponteiro.esq.info != null && ponteiro.esq.info.compareTo(valor) <= 0) {
-//                    ponteiro = ponteiro.dir;
-//                }
-//                if (ponteiro.info.compareTo(valor) == 0) {
-//                    if (ponteiro.esq.info == null && ponteiro.dir.info == null) {
-//                        pai.dir = null;
-//                        ponteiro = pai;
-//                    } else if (ponteiro.esq.info != null && ponteiro.dir.info == null && ponteiro.esq.info == valor) {
-//                        pai.esq = ponteiro.esq;
-//                        ponteiro.esq = ponteiro.esq.esq;
-//                        ponteiro.info = pai.info;
-//                        return ponteiro.info;
-//                    } else if (ponteiro.dir.info != null && ponteiro.esq.info == null) {
-//                        pai = ponteiro.dir;
-//                        ponteiro.dir = ponteiro.dir.dir;
-//                        ponteiro.info = pai.info;
-//                        return ponteiro.info;
-//                    } else if (ponteiro.dir.info != null && ponteiro.esq.info != null) {
-//                        teste = ponteiro;
-//                        ponteiro = ponteiro.esq;
-//
-//                        while (ponteiro.dir.info != null) {
-//                            pai = ponteiro;
-//                            ponteiro = ponteiro.dir;
-//                        }
-//                        pai.dir = null;
-//                        return teste.info = ponteiro.info;
-//                    }
-//                }
-//                ponteiro = ponteiro.dir;
-//                pai = ponteiro;
-//            }
-//        }
-//        return valor;
-//
-//    }
-
     public void impressaoPreOrdem(Node no) {
         if (no.info != null) {
             System.out.print(no.info + " ");
@@ -193,10 +98,6 @@ public class ABB<T extends Comparable<T>> {
             }
         }
     }
-
-
-
-
 }
 
 

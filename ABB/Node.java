@@ -1,3 +1,5 @@
+package ABB;
+
 public class Node<T>{
     public T info;
     public Node<T> esq,dir;
@@ -7,6 +9,4 @@ public class Node<T>{
         this.esq = null;
         this.dir = null;
     }
-
-
 }
