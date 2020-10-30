@@ -13,8 +13,4 @@ public class No<T> {
         this.cor = Cor.NEGRA;
     }
 
-    public No(T info){
-        this.info = info;
-        this.cor = Cor.NEGRA;
-    }
 }

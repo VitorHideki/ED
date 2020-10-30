@@ -78,6 +78,7 @@ public class RubroNegra<T extends Comparable<T>> {
 
 
     public void verificaBalanceamento(No<T> novoNo) {
+        No<T> avo = novoNo.pai.pai;
         while (novoNo.cor == RUBRO && novoNo.pai != null && novoNo.pai.cor == RUBRO) {
             if (novoNo.pai.pai == null) {
                 break;
@@ -95,10 +96,7 @@ public class RubroNegra<T extends Comparable<T>> {
                         novoNo = novoNo.esq;
                     }
                     rotacionaDireita(novoNo.pai.pai);
-                    if(novoNo.pai.pai !=null){
-                        novoNo.pai.pai.cor = RUBRO;
-                    }
-
+                    novoNo.pai.dir.cor = RUBRO;
                     novoNo.pai.cor = NEGRA;
                     novoNo = novoNo.pai;
                 }
@@ -115,10 +113,9 @@ public class RubroNegra<T extends Comparable<T>> {
                             rotacionaDireita(novoNo.pai);
                             novoNo = novoNo.dir;
                         }
+
                         rotacionaEsquerda(novoNo.pai.pai);
-                        if(novoNo.pai.pai !=null){
-                            novoNo.pai.pai.cor = RUBRO;
-                        }
+                        novoNo.pai.dir.cor = RUBRO;
                         novoNo.pai.cor = NEGRA;
                         novoNo = novoNo.pai;
                     }
@@ -143,4 +140,143 @@ public class RubroNegra<T extends Comparable<T>> {
             }
         }
     }
-}
+
+    public void removeUmUnicoFilho(ABB.Node ponteiro) {
+        ponteiro.info = ponteiro.esq.info;
+        ponteiro.dir = ponteiro.esq.dir;
+        ponteiro.esq = ponteiro.esq.esq;
+    }
+
+    public void removeNoFolha(ABB.Node<T> ponteiro) {
+        if (ponteiro.dir.info == null) {
+            ponteiro.info = ponteiro.esq.info;
+            ponteiro.dir = ponteiro.esq.dir;
+            ponteiro.esq = ponteiro.esq.esq;
+        } else {
+            ponteiro.info = ponteiro.dir.info;
+            ponteiro.esq = ponteiro.dir.esq;
+            ponteiro.dir = ponteiro.dir.dir;
+        }
+
+    }
+
+    public No remove(T valor) {
+        No ret = null;
+        No<T> ponteiro = this.raiz;
+        Object temp = null;
+        while (ponteiro.info != null) {
+            if (ponteiro.info.compareTo(valor) < 0) {
+                ponteiro = ponteiro.dir;
+            } else if (ponteiro.info.compareTo(valor) > 0) {
+                ponteiro = ponteiro.esq;
+            } else {
+                ret = ponteiro;
+                if (ponteiro.esq.info != null && ponteiro.dir.info != null) {
+                    ret = ponteiro.esq;
+                    ponteiro.info = (T) ret.info;
+                    ponteiro =  remMaiorEsq(ponteiro);
+                    verificaBalanceamentoRemocao(ponteiro);
+                    return ret;
+                } else if (ponteiro.dir.info == null) {
+                    ponteiro.info = ponteiro.esq.info;
+                    ponteiro.dir = ponteiro.esq.dir;
+                    ponteiro.esq = ponteiro.esq.esq;
+                    verificaBalanceamentoRemocao(ponteiro);
+                    return ret;
+                } else {
+                    ponteiro.info = ponteiro.dir.info;
+                    ponteiro.esq = ponteiro.dir.esq;
+                    ponteiro.dir = ponteiro.dir.dir;
+                    return ret;
+                }
+            }
+        }
+        return ret;
+
+        }
+
+
+    private No remMaiorEsq(No<T> ponteiro) {
+        ponteiro = ponteiro.esq;
+        while (ponteiro.dir.info != null) {
+            ponteiro = ponteiro.dir;
+        }
+
+        ponteiro.info = ponteiro.esq.info;
+        ponteiro.dir = ponteiro.esq.dir;
+        ponteiro.esq = ponteiro.esq.esq;
+        return ponteiro;
+    }
+
+
+
+
+
+
+
+    private No verificaBalanceamentoRemocao(No noRemovido) {
+        while (noRemovido != raiz && noRemovido.cor == NEGRA ) {
+            if (noRemovido.equals(noRemovido.pai.esq)) { // caso 1
+                No irmao = noRemovido.pai.dir;
+                if (irmao.cor == RUBRO) {
+                    irmao.cor = NEGRA;
+                    noRemovido.pai.cor = RUBRO;
+                    rotacionaEsquerda(noRemovido.pai);
+                    noRemovido = irmao;
+                }
+                if (irmao.esq.cor == NEGRA && irmao.dir.cor == NEGRA) { // caso 2
+                    irmao.cor = RUBRO;
+                    noRemovido = noRemovido.pai;
+                } else {
+                    if (irmao.dir.cor == NEGRA) {
+                        irmao.esq.cor = NEGRA;
+                        irmao.cor = RUBRO;
+                        rotacionaDireita(irmao);
+                        noRemovido = irmao;
+                    }
+                    irmao.cor = irmao.pai.cor;
+                    noRemovido.pai.cor = NEGRA;
+                    irmao.dir.cor = NEGRA;
+                    rotacionaEsquerda(irmao.pai);
+                    noRemovido = this.raiz;
+                    if (raiz.cor == RUBRO) {
+                        raiz.cor = NEGRA;
+                    }
+                }
+            }else{
+                if (noRemovido.equals(noRemovido.pai.dir)) {
+                    No irmao = noRemovido.pai.esq;
+                    if (irmao.cor == RUBRO){
+                        irmao.cor = NEGRA;
+                        noRemovido.pai.cor = RUBRO;
+                        rotacionaDireita(noRemovido.pai);
+                        noRemovido = irmao;
+                    }
+                    if (irmao.dir.cor == NEGRA && irmao.esq.cor == NEGRA){
+                        irmao.cor = RUBRO;
+                        noRemovido = irmao.pai;
+                    }else{
+                        if (irmao.esq.cor == NEGRA){
+                            irmao.dir.cor = NEGRA;
+                            irmao.cor = RUBRO;
+                            rotacionaEsquerda(irmao);
+                            noRemovido = irmao;
+                        }
+                        irmao.cor = irmao.pai.cor;
+                        noRemovido.pai.cor = NEGRA;
+                        irmao.esq.cor = NEGRA;
+                        rotacionaDireita(irmao.pai);
+                        noRemovido = this.raiz;
+                        if (raiz.cor == RUBRO) {
+                            raiz.cor = NEGRA;
+                        }
+                    }
+                }
+                }
+            noRemovido.cor = NEGRA;
+            return noRemovido;
+        }
+        return noRemovido;
+        }
+    }
+

@@ -15,9 +15,12 @@ public class ClasseTeste {
                     teste.insercao(numero);
                     break;
                 case 2:
+                    teste.remove(numero);
                     break;
                 case 3:
+                    System.out.println(">>>>>>RUBRO-NEGRA<<<<<<");
                     teste.impressaoPreOrdem(teste.raiz);
+                    System.out.println("");
                     break;
 
                 default:
