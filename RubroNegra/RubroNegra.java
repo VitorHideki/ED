@@ -116,7 +116,9 @@ public class RubroNegra<T extends Comparable<T>> {
                             novoNo = novoNo.dir;
                         }
                         rotacionaEsquerda(novoNo.pai.pai);
-                        novoNo.pai.pai.cor = RUBRO;
+                        if(novoNo.pai.pai !=null){
+                            novoNo.pai.pai.cor = RUBRO;
+                        }
                         novoNo.pai.cor = NEGRA;
                         novoNo = novoNo.pai;
                     }
