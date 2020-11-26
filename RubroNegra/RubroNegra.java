@@ -2,7 +2,6 @@ package RubroNegra;
 
 import static RubroNegra.Cor.RUBRO;
 import static RubroNegra.Cor.NEGRA;
-
 public class RubroNegra<T extends Comparable<T>> {
 
     protected No<T> raiz;
@@ -141,24 +140,6 @@ public class RubroNegra<T extends Comparable<T>> {
         }
     }
 
-    public void removeUmUnicoFilho(ABB.Node ponteiro) {
-        ponteiro.info = ponteiro.esq.info;
-        ponteiro.dir = ponteiro.esq.dir;
-        ponteiro.esq = ponteiro.esq.esq;
-    }
-
-    public void removeNoFolha(ABB.Node<T> ponteiro) {
-        if (ponteiro.dir.info == null) {
-            ponteiro.info = ponteiro.esq.info;
-            ponteiro.dir = ponteiro.esq.dir;
-            ponteiro.esq = ponteiro.esq.esq;
-        } else {
-            ponteiro.info = ponteiro.dir.info;
-            ponteiro.esq = ponteiro.dir.esq;
-            ponteiro.dir = ponteiro.dir.dir;
-        }
-
-    }
 
     public No remove(T valor) {
         No ret = null;
@@ -174,9 +155,8 @@ public class RubroNegra<T extends Comparable<T>> {
                 if (ponteiro.esq.info != null && ponteiro.dir.info != null) {
                     ret = ponteiro.esq;
                     ponteiro.info = (T) ret.info;
-                    ponteiro =  remMaiorEsq(ponteiro);
-                    verificaBalanceamentoRemocao(ponteiro);
-                    return ret;
+                    remMaiorEsq(ponteiro);
+                    verificaBalanceamentoRemocao(ret);
                 } else if (ponteiro.dir.info == null) {
                     ponteiro.info = ponteiro.esq.info;
                     ponteiro.dir = ponteiro.esq.dir;
@@ -193,7 +173,7 @@ public class RubroNegra<T extends Comparable<T>> {
         }
         return ret;
 
-        }
+    }
 
 
     private No remMaiorEsq(No<T> ponteiro) {
@@ -209,20 +189,16 @@ public class RubroNegra<T extends Comparable<T>> {
     }
 
 
-
-
-
-
-
     private No verificaBalanceamentoRemocao(No noRemovido) {
-        while (noRemovido != raiz && noRemovido.cor == NEGRA ) {
+        while (noRemovido != raiz && noRemovido.cor == NEGRA) {
             if (noRemovido.equals(noRemovido.pai.esq)) { // caso 1
                 No irmao = noRemovido.pai.dir;
                 if (irmao.cor == RUBRO) {
                     irmao.cor = NEGRA;
                     noRemovido.pai.cor = RUBRO;
                     rotacionaEsquerda(noRemovido.pai);
-                    noRemovido = irmao;
+                    irmao = noRemovido.pai.dir;
+
                 }
                 if (irmao.esq.cor == NEGRA && irmao.dir.cor == NEGRA) { // caso 2
                     irmao.cor = RUBRO;
@@ -232,9 +208,9 @@ public class RubroNegra<T extends Comparable<T>> {
                         irmao.esq.cor = NEGRA;
                         irmao.cor = RUBRO;
                         rotacionaDireita(irmao);
-                        noRemovido = irmao;
+                        irmao = noRemovido.pai.dir;
                     }
-                    irmao.cor = irmao.pai.cor;
+                    irmao.cor = noRemovido.pai.cor;
                     noRemovido.pai.cor = NEGRA;
                     irmao.dir.cor = NEGRA;
                     rotacionaEsquerda(irmao.pai);
@@ -243,40 +219,42 @@ public class RubroNegra<T extends Comparable<T>> {
                         raiz.cor = NEGRA;
                     }
                 }
-            }else{
+            } else {
                 if (noRemovido.equals(noRemovido.pai.dir)) {
                     No irmao = noRemovido.pai.esq;
-                    if (irmao.cor == RUBRO){
+                    if (irmao.cor == RUBRO) {
                         irmao.cor = NEGRA;
                         noRemovido.pai.cor = RUBRO;
                         rotacionaDireita(noRemovido.pai);
-                        noRemovido = irmao;
+                        irmao = noRemovido.pai.esq;
                     }
-                    if (irmao.dir.cor == NEGRA && irmao.esq.cor == NEGRA){
+                    if (irmao.dir.cor == NEGRA && irmao.esq.cor == NEGRA) {
                         irmao.cor = RUBRO;
                         noRemovido = irmao.pai;
-                    }else{
-                        if (irmao.esq.cor == NEGRA){
+                    } else {
+                        if (irmao.esq.cor == NEGRA) {
                             irmao.dir.cor = NEGRA;
                             irmao.cor = RUBRO;
                             rotacionaEsquerda(irmao);
-                            noRemovido = irmao;
+                            irmao = noRemovido.pai.esq;
                         }
-                        irmao.cor = irmao.pai.cor;
+                        irmao.cor = noRemovido.pai.cor;
                         noRemovido.pai.cor = NEGRA;
                         irmao.esq.cor = NEGRA;
-                        rotacionaDireita(irmao.pai);
+                        rotacionaDireita(noRemovido.pai);
                         noRemovido = this.raiz;
                         if (raiz.cor == RUBRO) {
                             raiz.cor = NEGRA;
                         }
                     }
                 }
-                }
-            noRemovido.cor = NEGRA;
+            }
+
+                noRemovido.cor = NEGRA;
             return noRemovido;
+
         }
-        return noRemovido;
+            return noRemovido;
         }
     }
 
